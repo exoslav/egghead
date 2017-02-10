@@ -1,0 +1,9 @@
+{
+    "sourceMaps": "both",
+    "presets": [
+        "es2016",
+        ["es2015", { "modules": "commonjs"}],
+        "stage-0",
+        "react"
+    ]
+}
