@@ -7,24 +7,24 @@ module.exports = function (env) {
   var project = {
     NAME: 'REACT',
     env: env.prod ? 'prod' : 'dev',
-    jsBase: './app/',
+    jsBase: './app/js/',
     cssBase: './src/css/'
   }
 
   var suffix = project.env === 'prod' ? '----------------------->' : '------------------------------>'
   console.log('<---------------------------------------------------------------------->')
-  console.log('<--------------------------- ' + project.NAME + ' ------------------------------>')
+  console.log('<------------------------------ ' + project.NAME + ' --------------------------------->')
   console.log('<----------------------- ' + project.env + ' environment ' + suffix)
   console.log('<------------------- the ultimate webpack experience ------------------>')
   console.log('<---------------------------------------------------------------------->')
 
   var config = {
     entry: {
-      'global': project.jsBase + 'main.js'
+      'global': project.jsBase + 'app.js'
     },
     output: {
       path: path.join(__dirname, '/dist'),
-      filename: '[name].js'
+      filename: 'app.js'
     },
     devtool: project.env === 'prod' ? 'source-map' : 'eval-source-map', // viz.: https://webpack.js.org/configuration/devtool/
     plugins: [
@@ -40,14 +40,14 @@ module.exports = function (env) {
     module: {
       rules: [
         {
-          test: /\.js$/,
+          test: /\.(js|jsx)$/,
           loader: 'babel-loader',
-          include: path.join(__dirname, '/src/js'),
+          include: path.join(__dirname, '/app/js'),
           exclude: /node_modules/,
           query: {
             cacheDirectory: true,
-            presets: ['react', 'es2015'],
-            plugins: ["rect-html-attrs", "transform-runtime"]
+            presets: ['es2015', 'react'],
+            plugins: ["react-html-attrs", "transform-runtime"]
           }
         },
         {
