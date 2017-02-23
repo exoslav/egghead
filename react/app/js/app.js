@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 class Layout extends React.Component {
   render() {
     return(
-      <h1>It works</h1>
+      <h1>It worsks!</h1>
     )
   }
 }
@@ -12,3 +12,7 @@ class Layout extends React.Component {
 const app = document.getElementById('app')
 
 ReactDOM.render(<Layout/>, app)
+
+if(module.hot) {
+  module.hot.accept()
+}

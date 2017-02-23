@@ -3,6 +3,7 @@ var webpack = require('webpack');
 var ExtractText = require('extract-text-webpack-plugin');
 
 module.exports = function (env) {
+  // TODO: STALE NEVIM JAK ROZBEHNOUT HOT RELOAD (webpack-dev-server)
 
   var project = {
     NAME: 'REACT',
@@ -34,6 +35,11 @@ module.exports = function (env) {
         allChunks: true
       })
     ],
+    // devServer: {
+    //   contentBase: path.join(__dirname, "/"),
+    //   port: 9000,
+    //   hot: true
+    // },
     resolve: {
       extensions: ['.js', '.es6', '.jsx', '.json']
     },
