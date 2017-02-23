@@ -4,7 +4,12 @@
   "description": "Tutorialy_z_eggheadu",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack --env.dev",
+    "build:prod": "webpack --env.prod -p",
+    "start": "webpack-dev-server --env.dev --content-base dist",
+    "prestart": "rimraf dist",
+    "validate-webpack:dev": "webpack-validator webpack.config.babel.js --env.dev",
+    "validate-webpack:prod": "webpack-validator webpack.config.babel.js --env.prod"
   },
   "repository": {
     "type": "git",
@@ -25,7 +30,7 @@
     "babel-loader": "^6.2.10",
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-stage-2": "^6.22.0",
-    "babel-register": "^6.22.0",
+    "style-loader": "^0.13.1",
     "webpack": "^2.2.1"
   },
   "babel": {
