@@ -1,6 +1,6 @@
 import React from 'react'
-import Header from './Header'
-import Footer from './Footer'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
 
 class Layout extends React.Component {
   constructor() {
@@ -33,7 +33,15 @@ class Layout extends React.Component {
   render() {
     return(
       <div>
-        <Header changeInputVal={this.changeTitle.bind(this)} title={this.state.title} default={this.state.placeholder} />
+        <Header
+          changeInputVal={this.changeTitle.bind(this)}
+          title={this.state.title}
+          default={this.state.placeholder}
+          router={this.props.router}
+        />
+
+        {this.props.children}
+
         <Footer/>
       </div>
     )
