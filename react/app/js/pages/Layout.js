@@ -1,6 +1,7 @@
 import React from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import TodoList from '../components/toDoList/ToDoList'
 
 class Layout extends React.Component {
   constructor() {
@@ -39,6 +40,8 @@ class Layout extends React.Component {
           default={this.state.placeholder}
           router={this.props.router}
         />
+
+        <TodoList />
 
         {this.props.children}
 

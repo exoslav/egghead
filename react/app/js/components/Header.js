@@ -21,7 +21,7 @@ class Header extends React.Component {
           onBlur={this.handleOnBlur.bind(this)}
           onChange={this.props.changeInputVal}
         />
-      <MainNav router={this.props.router} />
+        <MainNav router={this.props.router} />
       </header>
     )
   }
