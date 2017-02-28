@@ -1,5 +1,6 @@
 import React from 'react'
 import Title from './header/Title'
+import MainNav from './MainNav'
 
 class Header extends React.Component {
   handleOnFocus(e) {
