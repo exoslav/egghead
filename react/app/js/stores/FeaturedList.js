@@ -27,7 +27,7 @@ class Store extends EventEmitter {
     ]
   }
 
-  getAll(data) {
+  getAll() {
     return this.list
 
     this.emit('change')

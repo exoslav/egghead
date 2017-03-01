@@ -4,6 +4,7 @@ import Footer from '../components/Footer'
 import InfoBox from '../components/InfoBox'
 import WordsList from '../components/wordsList'
 import NewWordForm from '../components/NewWordForm'
+import LanguageMenu from '../components/LanguageMenu'
 import FeaturedList from '../components/featuredList'
 import * as WordListActions from '../actions/WordListActions'
 import * as FeaturedWordsActions from '../actions/FeaturedWordsActions'
@@ -14,14 +15,36 @@ import FeaturedListStore from '../stores/FeaturedList'
 class Layout extends React.Component {
   constructor() {
     super()
+
+    this.vocabularyOpts = {
+      langs: [
+        'CZ',
+        'SK',
+        'EN'
+      ],
+      activeLang: (() => {
+        let activeItem
+
+        if(localStorage.getItem('activeLanguageItem')) {
+          activeItem = localStorage.getItem('activeLanguageItem')
+        } else {
+          localStorage.setItem('activeLanguageItem', this.langs[0])
+          activeItem = this.vocabularyOpts.langs[0]
+        }
+
+        return activeItem
+      })()
+    }
+
     this.langs = {
       TITLE: 'Slovíčkárno'
     }
 
     this.state = {
+      vocabularyLang: this.vocabularyOpts.activeLang,
       totalVocabulary: WordListStore.getTotal(),
       totalVocabularyLearned: WordListStore.getTotalLearned(),
-      wordList: WordListStore.getAll(),
+      wordList: WordListStore.getAll(this.vocabularyOpts.activeLang),
       featuredWordsList: FeaturedListStore.getAll()
     }
   }
@@ -39,6 +62,13 @@ class Layout extends React.Component {
         totalVocabulary: WordListStore.getTotal(),
         totalVocabularyLearned: WordListStore.getTotalLearned(),
       })
+    })
+  }
+
+  changeVocabulary(lang) {
+    this.setState = ({
+      vocabularyLang: lang,
+      wordList: WordListStore.getAll(lang),
     })
   }
 
@@ -89,6 +119,14 @@ class Layout extends React.Component {
               <InfoBox
                 total={this.state.totalVocabulary}
                 totalLearned={this.state.totalVocabularyLearned}
+              />
+            </div>
+
+            <div class="col-sm-6">
+              <LanguageMenu
+                items={this.vocabularyOpts.langs}
+                activeItem={this.vocabularyOpts.activeLang}
+                changeLang={this.changeVocabulary.bind(this)}
               />
             </div>
 

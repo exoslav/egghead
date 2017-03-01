@@ -1,26 +1,12 @@
 import { EventEmitter } from 'events'
 import Dispatcher from '../dispatcher'
+import vocabulary from '../test-data/vocabulary'
 
 class Store extends EventEmitter {
   constructor() {
     super()
 
-    this.wordList = [
-      {
-        id: 6541864,
-        name: 'Sportovat',
-        content: 'Hrat fotbal a plavat',
-        wordType: 1,
-        learned: true
-      },
-      {
-        id: 45684655,
-        name: 'Nakoupit',
-        content: 'Jidlo a veci do prace a skoly',
-        wordType: 2,
-        learned: false
-      }
-    ]
+    this.wordList = vocabulary
 
     this.totalLearned = (() => {
       let total = 0
@@ -33,6 +19,7 @@ class Store extends EventEmitter {
 
       return total
     })()
+
     this.total = this.wordList.length
   }
 
@@ -44,8 +31,8 @@ class Store extends EventEmitter {
     return this.total
   }
 
-  getAll() {
-    return this.wordList
+  getAll(lang) {
+    return this.wordList[lang]
   }
 
   updateState(opts) {
