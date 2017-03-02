@@ -1,40 +1,22 @@
 import { EventEmitter } from 'events'
 import Dispatcher from '../dispatcher'
+import featured from '../test-data/featured'
 
 class Store extends EventEmitter {
   constructor() {
     super()
 
-    this.list = [
-      {
-        id: 78942,
-        name: 'Běhat',
-        content: 'To run, running',
-        wordType: 2
-      },
-      {
-        id: 8762,
-        name: 'Vařit',
-        content: 'To cook, cooking',
-        wordType: 2
-      },
-      {
-        id: 467818,
-        name: 'Jíst',
-        content: 'to eat, eating',
-        wordType: 2
-      }
-    ]
+    this.featuredList = featured
   }
 
-  getAll() {
-    return this.list
+  getAll(lang) {
+    return this.featuredList[lang]
 
     this.emit('change')
   }
 
   addFeaturedItem(data) {
-    this.list.push({
+    this.featuredList[data.lang].push({
       id: Date.now(),
       name: data.name,
       content: data.content,
@@ -45,7 +27,7 @@ class Store extends EventEmitter {
   }
 
   deleteFeaturedItem(id) {
-    const list = this.list
+    const list = this.featuredList
     for(let i = 0; i < list.length; i++) {
       if(list[i].id === parseInt(id))
         list.splice(i, 1)

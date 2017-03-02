@@ -39,7 +39,8 @@ class Layout extends React.Component {
     }
 
     this.langs = {
-      TITLE: 'Slovíčkárno'
+      TITLE: 'Slovíčkárno',
+      SUBTITLE: 'prostě pro slovíčka'
     }
 
     this.state = {
@@ -47,31 +48,31 @@ class Layout extends React.Component {
       totalVocabulary: WordListStore.getTotal(),
       totalVocabularyLearned: WordListStore.getTotalLearned(),
       wordList: WordListStore.getAll(this.vocabularyOpts.activeLang),
-      featuredWordsList: FeaturedListStore.getAll()
+      featuredWordsList: FeaturedListStore.getAll(this.vocabularyOpts.activeLang)
     }
   }
 
   componentWillMount() {
     FeaturedListStore.on('change', () => {
       this.setState({
-        featuredWordsList: FeaturedListStore.getAll()
+        featuredWordsList: FeaturedListStore.getAll(this.state.vocabularyLang)
       })
     })
 
     WordListStore.on('change', () => {
       this.setState({
-        wordList: WordListStore.getAll(),
+        wordList: WordListStore.getAll(this.state.vocabularyLang),
         totalVocabulary: WordListStore.getTotal(),
-        totalVocabularyLearned: WordListStore.getTotalLearned(),
+        totalVocabularyLearned: WordListStore.getTotalLearned()
       })
     })
   }
 
   changeVocabulary(lang) {
-    console.log(this.state.wordList[0].name)
     this.setState({
-      vocabularyLang: lang,
       wordList: WordListStore.getAll(lang),
+      featuredWordsList: FeaturedListStore.getAll(lang),
+      vocabularyLang: lang
     })
   }
 
@@ -81,7 +82,8 @@ class Layout extends React.Component {
 
     WordListActions.createTodo({
       name,
-      content
+      content,
+      lang: this.state.vocabularyLang
     })
   }
 
@@ -96,7 +98,8 @@ class Layout extends React.Component {
 
     FeaturedWordsActions.addFeaturedItem({
       name,
-      content
+      content,
+      lang: this.state.vocabularyLang
     })
   }
 
@@ -108,46 +111,48 @@ class Layout extends React.Component {
   render() {
     return(
       <div>
-        <div class="container">
-          <Header title={this.langs.TITLE} />
+        <header class="bg-info">
+          <Header title={this.langs.TITLE} subtitle={this.langs.SUBTITLE} />
+        </header>
 
-          <div class="row">
-            <div class="col-sm-6">
-              <NewWordForm
-                createItem={this.addWordListItem.bind(this)}
-              />
-            </div>
+        <div id="vocabulary-header" class="bg-primary vocabulary-box">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6">
+                <NewWordForm
+                  createItem={this.addWordListItem.bind(this)}
+                />
+              </div>
 
-            <div class="col-sm-6">
-              <InfoBox
-                total={this.state.totalVocabulary}
-                totalLearned={this.state.totalVocabularyLearned}
-              />
-            </div>
+              <div class="col-sm-6">
+                <InfoBox
+                  total={this.state.totalVocabulary}
+                  totalLearned={this.state.totalVocabularyLearned}
+                />
+              </div>
 
-            <div class="col-sm-6">
-              <LanguageMenu
-                items={this.vocabularyOpts.langs}
-                activeItem={this.vocabularyOpts.activeLang}
-                changeLang={this.changeVocabulary.bind(this)}
-              />
-            </div>
-
-            <div class="col-sm-12">
-              <FeaturedList
-                items={this.state.featuredWordsList}
-                delete={this.deleteFeaturedWordsItem.bind(this)}
-                add={this.addFeaturedWordsItem.bind(this)}
-              />
-            </div>
-
-            <div class="col-sm-12">
-              <WordsList
-                items={this.state.wordList}
-                delete={this.deleteWordListItem.bind(this)}
-              />
+              <div class="col-sm-6">
+                <LanguageMenu
+                  items={this.vocabularyOpts.langs}
+                  activeItem={this.vocabularyOpts.activeLang}
+                  changeLang={this.changeVocabulary.bind(this)}
+                />
+              </div>
             </div>
           </div>
+        </div>
+
+        <div class="container">
+          <FeaturedList
+            items={this.state.featuredWordsList}
+            delete={this.deleteFeaturedWordsItem.bind(this)}
+            add={this.addFeaturedWordsItem.bind(this)}
+          />
+
+          <WordsList
+            items={this.state.wordList}
+            delete={this.deleteWordListItem.bind(this)}
+          />
         </div>
 
         <Footer/>

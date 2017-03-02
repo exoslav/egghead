@@ -2,15 +2,20 @@ import React from 'react'
 
 class Item extends React.Component {
   render() {
+    const erase = this.props.delete
+    const { name, content, id } = this.props.data
+
     return(
-      <div class="col-sm-3">
+      <div class="item col-sm-3">
         <dt class="to-do-list-item">
-          <strong>{this.props.name}</strong>
+          <strong>{name}</strong>
         </dt>
         <dd>
-          <span>{this.props.content}</span>
-          <button class="btn btn-success btn-xs" type="button" data-id={this.props.id}>learned</button>
-          <button onClick={this.props.delete} class="btn btn-danger btn-xs" type="button" data-id={this.props.id}>X</button>
+          <span>{content}</span>
+          <div>
+            <button class="btn btn-success btn-xs" type="button" data-id={id}>learned</button>
+            <button onClick={erase} class="btn btn-danger btn-xs" type="button" data-id={id}>X</button>
+          </div>
         </dd>
       </div>
     )

@@ -4,15 +4,13 @@ import Item from './Item'
 class FeaturedList extends React.Component {
   render() {
     const items = this.props.items.map((item, i) => <Item
-      name={item.name}
-      content={item.content}
+      data={item}
       key={i}
-      id={item.id}
       delete={this.props.delete}
     />)
 
     return(
-      <div id="featured-vocabulary" class="bg-danger">
+      <div id="featured-list" class="bg-info vocabulary-box">
         <h3>Featured words</h3>
 
         <form class="row">

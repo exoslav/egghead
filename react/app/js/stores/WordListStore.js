@@ -48,7 +48,7 @@ class Store extends EventEmitter {
   addItem(data) {
     const { name, content } = data
 
-    this.wordList.push({
+    this.wordList[data.lang].push({
       id: Date.now(),
       name,
       content

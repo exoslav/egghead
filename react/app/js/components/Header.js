@@ -12,8 +12,9 @@ class Header extends React.Component {
 
   render() {
     return(
-      <header>
-        <Title title={this.props.title} />
+      <div class="container vocabulary-box">
+        <img id="logo" src="./app/imgs/logo.png" />
+        <Title title={this.props.title} subtitle={this.props.subtitle} />
         {/*
         <input
           class="form-control"
@@ -25,7 +26,7 @@ class Header extends React.Component {
 
         <MainNav router={this.props.router} />
         */}
-      </header>
+      </div>
     )
   }
 }
