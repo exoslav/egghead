@@ -16,20 +16,22 @@ class Layout extends React.Component {
   constructor() {
     super()
 
+    this.menuItems = [
+      'CZ',
+      'SK',
+      'EN'
+    ]
+
     this.vocabularyOpts = {
-      langs: [
-        'CZ',
-        'SK',
-        'EN'
-      ],
+      langs: this.menuItems,
       activeLang: (() => {
         let activeItem
 
         if(localStorage.getItem('activeLanguageItem')) {
           activeItem = localStorage.getItem('activeLanguageItem')
         } else {
-          localStorage.setItem('activeLanguageItem', this.langs[0])
-          activeItem = this.vocabularyOpts.langs[0]
+          localStorage.setItem('activeLanguageItem', this.menuItems[0])
+          activeItem = this.menuItems[0]
         }
 
         return activeItem
@@ -66,7 +68,8 @@ class Layout extends React.Component {
   }
 
   changeVocabulary(lang) {
-    this.setState = ({
+    console.log(this.state.wordList[0].name)
+    this.setState({
       vocabularyLang: lang,
       wordList: WordListStore.getAll(lang),
     })
