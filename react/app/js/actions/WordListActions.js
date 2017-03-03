@@ -2,14 +2,15 @@ import Dispatcher from '../dispatcher'
 
 export function createTodo(data) {
   Dispatcher.dispatch({
-    actionType: 'CREATE_TODO_ITEM',
+    actionType: 'CREATE_WORDLIST_ITEM',
     data
   })
 }
 
-export function deleteTodoItem(id) {
+export function deleteWordListItem(id, lang) {
   Dispatcher.dispatch({
-    actionType: 'DELETE_TODO_ITEM',
-    id
+    actionType: 'DELETE_WORDLIST_ITEM',
+    id,
+    lang
   })
 }

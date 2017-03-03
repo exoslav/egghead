@@ -26,8 +26,8 @@ class Store extends EventEmitter {
     this.emit('change')
   }
 
-  deleteFeaturedItem(id) {
-    const list = this.featuredList
+  deleteFeaturedItem(id, lang) {
+    const list = this.featuredList[lang]
     for(let i = 0; i < list.length; i++) {
       if(list[i].id === parseInt(id))
         list.splice(i, 1)
@@ -43,7 +43,7 @@ class Store extends EventEmitter {
         break;
       default:
       case 'DELETE_FEATURED_ITEM':
-        this.deleteFeaturedItem(action.id)
+        this.deleteFeaturedItem(action.id, action.lang)
         break;
     }
   }

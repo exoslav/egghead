@@ -7,9 +7,10 @@ export function addFeaturedItem(data) {
   })
 }
 
-export function deleteFeaturedItem(id) {
+export function deleteFeaturedItem(id, lang) {
   Dispatcher.dispatch({
     actionType: 'DELETE_FEATURED_ITEM',
-    id
+    id,
+    lang
   })
 }

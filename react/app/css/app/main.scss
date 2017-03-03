@@ -6,6 +6,10 @@ h1 {
   }
 }
 
+input {
+  transition: none !important; // bootstrap reset
+}
+
 footer {
   padding-top: 30px;
   padding-bottom: 30px;
@@ -32,9 +36,41 @@ footer {
   margin-bottom: 20px;
 }
 
+#vocabulary-header {
+  form {
+    .invalid {
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 2px #d9534f inset;
+    }
+  }
+}
+
 #featured-list {
   .item {
     margin-bottom: 15px;
+
+    .item-header {
+      position: relative;
+      padding-right: 15px;
+      
+      .item-learned {
+        position: absolute;
+        top: calc(50% - 5px);
+        right: 0;
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 20em;
+
+        &.learned {
+          background: #5cb85c;
+        }
+
+        &.not-learned {
+          background: #d9534f;
+        }
+      }
+    }
 
     &:nth-of-type(4n+1) {
       clear: both;
@@ -43,6 +79,7 @@ footer {
 }
 
 #vocabulary-list {
+  min-height: 500px;
   margin-bottom: 75px;
 
   .vocabulary-filter {
@@ -65,8 +102,22 @@ footer {
         outline: 0 !important;
       }
 
+      .btn.bg-info:hover {
+        background: darken(#d9edf7, 5%)
+      }
+
       .btn.active {
         color: #fff !important;
+      }
+    }
+  }
+
+  .no-results {
+    .wrapper {
+      display: inline-block;
+
+      img {
+        width: 250px;
       }
     }
   }

@@ -1,6 +1,9 @@
 import $ from 'jquery'
 import React from 'react'
 import WordsListItem from './Item'
+import NoResult from './NoResult'
+import ResultList from './ResultList'
+import deepObjectCopy from '../../helpers/deepObjectCopy'
 
 class WordList extends React.Component {
   constructor() {
@@ -8,31 +11,52 @@ class WordList extends React.Component {
 
     this.state = {
       layout: 'col-xs-12',
-      filter: []
+      filter: {
+        wordClass: [],
+        other: []
+      }
+    }
+  }
+
+  handleActiveClassOnFilterMenu(e) {
+    if(e.target.getAttribute('data-filter-type') === 'layout') {
+      $('.layout-filter button').removeClass('active bg-primary').addClass('bg-info')
+      $(e.target).addClass('active bg-primary').removeClass('bg-info')
+    } else {
+      if($(e.target).hasClass('active')) {
+        $(e.target).removeClass('active bg-primary').addClass('bg-info')
+      } else {
+        $(e.target).removeClass('bg-info').addClass('active bg-primary')
+      }
     }
   }
 
   changeLayout(e) {
+    this.handleActiveClassOnFilterMenu(e)
     const layout = e.target.getAttribute('data-layout')
-
-    $('.layout-filter button').addClass('bg-info').removeClass('bg-primary active')
-    $(e.target).removeClass('bg-info').addClass('bg-primary active')
 
     this.setState({
       layout
     })
   }
 
-  handleFiltering(e) {
-    let newFilter = filter.slice()
-    const filter = this.state.filter
-    const val = e.target.getAttribute('data-filter')
-    const index = newFilter.indexOf(val)
+  setFilter(e) {
+    this.handleActiveClassOnFilterMenu(e)
+
+    let val = e.target.getAttribute('data-filter-value')
+    const type = e.target.getAttribute('data-filter-type')
+
+    if(type === 'wordClass') {
+      val = parseInt(val)
+    }
+
+    let newFilter = deepObjectCopy(this.state.filter)
+    const index = newFilter[type].indexOf(val)
 
     if(index > -1) {
-      newFilter.splice(index, 1)
+      newFilter[type].splice(index, 1)
     } else {
-      newFilter = newFilter.concat([val])
+      newFilter[type] = newFilter[type].concat([val])
     }
 
     this.setState({
@@ -41,38 +65,49 @@ class WordList extends React.Component {
   }
 
   render() {
+    let items = this.props.items
     const filteredItems = []
-    const items = this.props.items
+    const filter = this.state.filter
 
-    // // vyprazdni vyfiltrovane itemy
-  	// filteredItems.splice(0, filteredItems.length)
-    //
-    // for(let i = 0; i < items.length; i++) {
-    // 	let item = items[i]
-  	// 	let sluzby = item.sluzby
-    //   let filterCount = 0
-    //
-    //   for(let j = 0; j < filter.length; j++) {
-    //   	let filterKey = filter[j]
-    //
-    //     for(let k = 0; k < sluzby.length; k++) {
-    //     	let sluzba = sluzby[k]
-    //
-  	// 			if(filterKey === sluzba)
-    //       	filterCount++
-    //     }
-    //   }
-    //
-    //   if(filterCount === filter.length)
-    //   	filteredItems.push(item)
-    // }
+    if(filter['wordClass'].length !== 0) {
+      items = items.filter(item => {
+        for (let i = 0; i < filter['wordClass'].length; i++) {
+          if(filter['wordClass'].indexOf(item.wordClass) > -1) {
+            return true
+          } else {
+            return false
+          }
+        }
+      })
+    }
 
-    const WordList = items.map((item) => <WordsListItem
-      deleteItem={this.props.delete}
-      key={item.id}
-      data={item}
-      layout={this.state.layout}
-    />)
+    if(filter['other'].length !== 0) {
+      items = items.filter(item => {
+        let state = true
+        for (let i = 0; i < filter['other'].length; i++) {
+          if(!item[filter['other'][i]]) {
+            state = false
+          }
+        }
+
+        return state
+      })
+    }
+
+    let block
+    if(items.length === 0) {
+      block = <NoResult />
+    } else {
+      const WordList = items.map((item) => <WordsListItem
+        deleteItem={this.props.delete}
+        key={item.id}
+        data={item}
+        layout={this.state.layout}
+      />)
+
+      block = <ResultList items={WordList} />
+    }
+
 
     return(
       <div id="vocabulary-list">
@@ -81,41 +116,39 @@ class WordList extends React.Component {
             <li class="layout-filter">
               <strong>Layout:</strong>
               <ul class="list-unstyled">
-                <li><button onClick={this.changeLayout.bind(this)} class="btn bg-primary active btn-xs" data-layout="col-xs-12">1 column</button></li>
-                <li><button onClick={this.changeLayout.bind(this)} class="btn bg-info btn-xs" data-layout="col-xs-6">2 columns</button></li>
+                <li><button onClick={this.changeLayout.bind(this)} class="btn bg-primary active btn-xs" data-filter-type="layout" data-layout="col-xs-12">1 column</button></li>
+                <li><button onClick={this.changeLayout.bind(this)} class="btn bg-info btn-xs" data-filter-type="layout" data-layout="col-xs-6">2 columns</button></li>
               </ul>
             </li>
 
             <li>
               <strong>Word class:</strong>
               <ul class="list-unstyled">
-                <li><button onClick={this.handleFiltering.bind(this)} data-filter="1" class="btn bg-info btn-xs">Substantiva</button></li>
-                <li><button onClick={this.handleFiltering.bind(this)} data-filter="2" class="btn bg-info btn-xs">Adjectives</button></li>
-                <li><button onClick={this.handleFiltering.bind(this)} data-filter="3" class="btn bg-info btn-xs">Pronomina</button></li>
-                <li><button onClick={this.handleFiltering.bind(this)} data-filter="4" class="btn bg-info btn-xs">Numeralia</button></li>
-                <li><button onClick={this.handleFiltering.bind(this)} data-filter="5" class="btn bg-info btn-xs">Verba</button></li>
-                <li><button onClick={this.handleFiltering.bind(this)} data-filter="6" class="btn bg-info btn-xs">Adverbia</button></li>
-                <li><button onClick={this.handleFiltering.bind(this)} data-filter="7" class="btn bg-info btn-xs">Prepozice</button></li>
-                <li><button onClick={this.handleFiltering.bind(this)} data-filter="8" class="btn bg-info btn-xs">Konjunkce</button></li>
-                <li><button onClick={this.handleFiltering.bind(this)} data-filter="9" class="btn bg-info btn-xs">Partikule</button></li>
-                <li><button onClick={this.handleFiltering.bind(this)} data-filter="10" class="btn bg-info btn-xs">Interjekce</button></li>
+                <li><button onClick={this.setFilter.bind(this)} data-filter-type="wordClass" data-filter-value="1" class="btn bg-info btn-xs">Substantiva</button></li>
+                <li><button onClick={this.setFilter.bind(this)} data-filter-type="wordClass" data-filter-value="2" class="btn bg-info btn-xs">Adjectives</button></li>
+                <li><button onClick={this.setFilter.bind(this)} data-filter-type="wordClass" data-filter-value="3" class="btn bg-info btn-xs">Pronomina</button></li>
+                <li><button onClick={this.setFilter.bind(this)} data-filter-type="wordClass" data-filter-value="4" class="btn bg-info btn-xs">Numeralia</button></li>
+                <li><button onClick={this.setFilter.bind(this)} data-filter-type="wordClass" data-filter-value="5" class="btn bg-info btn-xs">Verba</button></li>
+                <li><button onClick={this.setFilter.bind(this)} data-filter-type="wordClass" data-filter-value="6" class="btn bg-info btn-xs">Adverbia</button></li>
+                <li><button onClick={this.setFilter.bind(this)} data-filter-type="wordClass" data-filter-value="7" class="btn bg-info btn-xs">Prepozice</button></li>
+                <li><button onClick={this.setFilter.bind(this)} data-filter-type="wordClass" data-filter-value="8" class="btn bg-info btn-xs">Konjunkce</button></li>
+                <li><button onClick={this.setFilter.bind(this)} data-filter-type="wordClass" data-filter-value="9" class="btn bg-info btn-xs">Partikule</button></li>
+                <li><button onClick={this.setFilter.bind(this)} data-filter-type="wordClass" data-filter-value="10" class="btn bg-info btn-xs">Interjekce</button></li>
               </ul>
             </li>
 
             <li>
               <strong>Others:</strong>
               <ul class="list-unstyled">
-                <li><button onClick={this.handleFiltering.bind(this)} data-filter="idioms" class="btn bg-info btn-xs">Idioms</button></li>
-                <li><button onClick={this.handleFiltering.bind(this)} data-filter="learned" class="btn bg-info btn-xs">Learned</button></li>
+                <li><button onClick={this.setFilter.bind(this)} data-filter-type="other" data-filter-value="idioms" class="btn bg-info btn-xs">Idioms</button></li>
+                <li><button onClick={this.setFilter.bind(this)} data-filter-type="other" data-filter-value="learned" class="btn bg-info btn-xs">Learned</button></li>
               </ul>
             </li>
           </ul>
         </div>
 
         <div class="row">
-          <dl class="dl-horizontal">
-            {WordList}
-          </dl>
+          {block}
         </div>
       </div>
     )

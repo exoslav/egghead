@@ -1,3 +1,4 @@
+import $ from 'jquery'
 import React from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -77,19 +78,43 @@ class Layout extends React.Component {
   }
 
   addWordListItem() {
-    let name = document.getElementById('create-to-do-item-name').value
-    let content = document.getElementById('create-to-do-item-content').value
+    let name = document.getElementById('create-to-do-item-name')
+    let content = document.getElementById('create-to-do-item-content')
+    let wordClass = document.getElementById('create-to-do-item-wordclass')
+    let learned = document.getElementById('create-to-do-item-learned')
+    let idioms = document.getElementById('create-to-do-item-idiom')
+
+    let valid = true
+    if(name.value === '') {
+      $(name).addClass('invalid')
+      valid = false
+    } else {
+      $(name).removeClass('invalid')
+    }
+
+    if(content.value === '') {
+      $(content).addClass('invalid')
+      valid = false
+    } else {
+      $(content).removeClass('invalid')
+    }
+
+    if(!valid)
+      return
 
     WordListActions.createTodo({
-      name,
-      content,
+      name: name.value,
+      content: content.value,
+      wordClass: parseInt(wordClass.value),
+      learned: learned.checked,
+      idioms: idioms.checked,
       lang: this.state.vocabularyLang
     })
   }
 
   deleteWordListItem(e) {
     const id = e.target.getAttribute('data-id')
-    WordListActions.deleteTodoItem(id)
+    WordListActions.deleteWordListItem(id, this.state.vocabularyLang)
   }
 
   addFeaturedWordsItem(e) {
@@ -105,7 +130,7 @@ class Layout extends React.Component {
 
   deleteFeaturedWordsItem(e) {
     const id = e.target.getAttribute('data-id')
-    FeaturedWordsActions.deleteFeaturedItem(id)
+    FeaturedWordsActions.deleteFeaturedItem(id, this.state.vocabularyLang)
   }
 
   render() {

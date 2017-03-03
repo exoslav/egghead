@@ -46,12 +46,15 @@ class Store extends EventEmitter {
   }
 
   addItem(data) {
-    const { name, content } = data
+    const { name, content, wordClass, learned, idioms } = data
 
     this.wordList[data.lang].push({
       id: Date.now(),
       name,
-      content
+      content,
+      wordClass,
+      learned,
+      idioms
     })
 
     this.updateState({
@@ -63,10 +66,10 @@ class Store extends EventEmitter {
     this.emit('change')
   }
 
-  deleteItem(id) {
+  deleteItem(id, lang) {
     let learned
-    const list = this.wordList
-
+    const list = this.wordList[lang]
+    console.log(list, lang, id)
     for(let i = 0; i < list.length; i++) {
       if(list[i].id === parseInt(id)) {
         learned = list[i].learned ? true : false
@@ -86,11 +89,11 @@ class Store extends EventEmitter {
 
   handleActions(action) {
     switch (action.actionType) {
-      case 'CREATE_TODO_ITEM':
+      case 'CREATE_WORDLIST_ITEM':
         this.addItem(action.data)
         break;
-      case 'DELETE_TODO_ITEM':
-        this.deleteItem(action.id)
+      case 'DELETE_WORDLIST_ITEM':
+        this.deleteItem(action.id, action.lang)
         break;
       default:
     }
