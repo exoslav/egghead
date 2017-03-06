@@ -1,11 +1,40 @@
+import $ from 'jquery'
 import React from 'react'
 
 class NewWordForm extends React.Component {
-  constructor() {
-    super()
+  submitForm() {
+    let name = document.getElementById('create-to-do-item-name')
+    let content = document.getElementById('create-to-do-item-content')
+    let wordClass = document.getElementById('create-to-do-item-wordclass')
+    let learned = document.getElementById('create-to-do-item-learned')
+    let idioms = document.getElementById('create-to-do-item-idiom')
 
-    this.state = {
+    let valid = true
+    if(name.value === '') {
+      $(name).addClass('invalid')
+      valid = false
+    } else {
+      $(name).removeClass('invalid')
+    }
 
+    if(content.value === '') {
+      $(content).addClass('invalid')
+      valid = false
+    } else {
+      $(content).removeClass('invalid')
+    }
+
+    if(!valid) {
+      return
+    } else {
+      this.props.createItem({
+        name: name.value,
+        content: content.value,
+        wordClass: parseInt(wordClass.value),
+        learned: learned.checked,
+        idioms: idioms.checked,
+        lang: this.props.vocabularyLang
+      })
     }
   }
 
@@ -69,7 +98,7 @@ class NewWordForm extends React.Component {
 
         <button
           class="btn btn-info pull-right"
-          onClick={this.props.createItem.bind(this)} type="button"
+          onClick={this.submitForm.bind(this)} type="button"
         >
           Add new word to vocabulary
         </button>

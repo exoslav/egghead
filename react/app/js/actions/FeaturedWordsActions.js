@@ -1,9 +1,18 @@
 import Dispatcher from '../dispatcher'
 
-export function addFeaturedItem(data) {
+export function handleFeaturedListLearnItem(id, lang) {
+  Dispatcher.dispatch({
+    actionType: 'LEARN_FEATURED_ITEM',
+    id,
+    lang
+  })
+}
+
+export function addFeaturedItem(data, lang) {
   Dispatcher.dispatch({
     actionType: 'ADD_FEATURED_ITEM',
-    data
+    data,
+    lang
   })
 }
 

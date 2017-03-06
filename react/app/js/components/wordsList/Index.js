@@ -100,9 +100,11 @@ class WordList extends React.Component {
     } else {
       const WordList = items.map((item) => <WordsListItem
         deleteItem={this.props.delete}
+        learn={this.props.learn}
         key={item.id}
         data={item}
         layout={this.state.layout}
+        add={this.props.add}
       />)
 
       block = <ResultList items={WordList} />

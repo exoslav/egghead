@@ -7,11 +7,12 @@ class FeaturedList extends React.Component {
       data={item}
       key={i}
       delete={this.props.delete}
+      learn={this.props.learn}
     />)
 
     return(
       <div id="featured-list" class="bg-info vocabulary-box">
-        <h3>Featured words</h3>
+        <h3><span class="fa fa-star-o">&nbsp;</span>Featured words</h3>
 
         <dl class="row">
           {items}

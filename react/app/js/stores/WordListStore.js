@@ -69,7 +69,7 @@ class Store extends EventEmitter {
   deleteItem(id, lang) {
     let learned
     const list = this.wordList[lang]
-    console.log(list, lang, id)
+
     for(let i = 0; i < list.length; i++) {
       if(list[i].id === parseInt(id)) {
         learned = list[i].learned ? true : false
@@ -87,15 +87,26 @@ class Store extends EventEmitter {
     this.emit('change')
   }
 
+  handleLearnedItem(id, lang) {
+    const list = this.wordList[lang]
+    for(let i = 0; i < list.length; i++) {
+      if(list[i].id === parseInt(id))
+        list[i].learned = !list[i].learned
+    }
+    this.emit('change')
+  }
+
   handleActions(action) {
     switch (action.actionType) {
       case 'CREATE_WORDLIST_ITEM':
         this.addItem(action.data)
         break;
+      case 'LEARN_WORD_ITEM':
+        this.handleLearnedItem(action.id, action.lang)
+        break;
       case 'DELETE_WORDLIST_ITEM':
         this.deleteItem(action.id, action.lang)
         break;
-      default:
     }
   }
 }
