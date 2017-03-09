@@ -16,11 +16,14 @@ class Store extends EventEmitter {
   }
 
   addFeaturedItem(data, lang) {
+    const { id, name, content, learned, featured } = data
+
     this.featuredList[lang].push({
-      id: Date.now(),
-      name: data.name,
-      content: data.content,
-      wordType: 2
+      id,
+      name,
+      content,
+      learned,
+      featured
     })
 
     this.emit('change')

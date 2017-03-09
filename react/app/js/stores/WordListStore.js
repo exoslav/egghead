@@ -66,6 +66,17 @@ class Store extends EventEmitter {
     this.emit('change')
   }
 
+  updateItem(data, lang) {
+    const list = this.wordList[lang]
+    for (let i = 0; i < list.length; i++) {
+      if(list[i].id === data.id) {
+        list[i] = data
+      }
+    }
+
+    this.emit('change')
+  }
+
   deleteItem(id, lang) {
     let learned
     const list = this.wordList[lang]
@@ -103,6 +114,9 @@ class Store extends EventEmitter {
         break;
       case 'LEARN_WORD_ITEM':
         this.handleLearnedItem(action.id, action.lang)
+        break;
+      case 'UPDATE_WORDLIST_ITEM':
+        this.updateItem(action.newItem, action.lang)
         break;
       case 'DELETE_WORDLIST_ITEM':
         this.deleteItem(action.id, action.lang)

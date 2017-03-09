@@ -100,6 +100,7 @@ class WordList extends React.Component {
     } else {
       const WordList = items.map((item) => <WordsListItem
         deleteItem={this.props.delete}
+        deleteItemFromFeatued={this.props.deleteFromFeatured}
         learn={this.props.learn}
         key={item.id}
         data={item}

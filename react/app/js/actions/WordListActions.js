@@ -8,10 +8,18 @@ export function handleWordListLearnItem(id, lang) {
   })
 }
 
-export function createTodo(data) {
+export function createWordListItem(data) {
   Dispatcher.dispatch({
     actionType: 'CREATE_WORDLIST_ITEM',
     data
+  })
+}
+
+export function updateWordListItem(data, lang) {
+  Dispatcher.dispatch({
+    actionType: 'UPDATE_WORDLIST_ITEM',
+    newItem: data,
+    lang
   })
 }
 

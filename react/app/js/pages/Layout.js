@@ -56,7 +56,8 @@ class Layout extends React.Component {
   componentWillMount() {
     FeaturedListStore.on('change', () => {
       this.setState({
-        featuredWordsList: FeaturedListStore.getAll(this.state.vocabularyLang)
+        featuredWordsList: FeaturedListStore.getAll(this.state.vocabularyLang),
+        wordList: WordListStore.getAll(this.state.vocabularyLang)
       })
     })
 
@@ -77,9 +78,10 @@ class Layout extends React.Component {
     })
   }
 
+  // WORDLIST ACTIONS
   addWordListItem(data) {
     const { name, content, wordClass, learned, idioms, lang} = data
-    WordListActions.createTodo({
+    WordListActions.createWordListItem({
       name, content, wordClass, learned, idioms, lang
     })
   }
@@ -89,6 +91,11 @@ class Layout extends React.Component {
     WordListActions.deleteWordListItem(id, this.state.vocabularyLang)
   }
 
+  updateWordListItem(data) {
+    WordListActions.updateWordListItem(data, this.state.vocabularyLang)
+  }
+
+  // FEATURED ACTIONS
   addFeaturedWordsItem(e) {
     let name = document.getElementById('create-featured-item-name').value
     let content = document.getElementById('create-featured-item-content').value
@@ -104,13 +111,23 @@ class Layout extends React.Component {
     FeaturedWordsActions.addFeaturedItem(data, this.state.vocabularyLang)
   }
 
+  addItemToFeaturedFromWordList(data) {
+    this.addItemToFeatured(data)
+    this.updateWordListItem(data)
+  }
+
+  removeItemFromFeaturedFromWordList(data, event) {
+    this.deleteFeaturedWordsItem(event)
+    this.updateWordListItem(data)
+  }
+
   deleteFeaturedWordsItem(e) {
-    const id = e.target.getAttribute('data-id')
+    const id = e.target.getAttribute('data-item-id')
     FeaturedWordsActions.deleteFeaturedItem(id, this.state.vocabularyLang)
   }
 
   handleLearn(e) {
-    const id = e.target.getAttribute('data-id')
+    const id = e.target.getAttribute('data-item-id')
     WordListActions.handleWordListLearnItem(id, this.state.vocabularyLang)
     FeaturedWordsActions.handleFeaturedListLearnItem(id, this.state.vocabularyLang)
   }
@@ -160,8 +177,9 @@ class Layout extends React.Component {
           <WordsList
             items={this.state.wordList}
             delete={this.deleteWordListItem.bind(this)}
+            deleteFromFeatured={this.removeItemFromFeaturedFromWordList.bind(this)}
             learn={this.handleLearn.bind(this)}
-            add={this.addItemToFeatured.bind(this)}
+            add={this.addItemToFeaturedFromWordList.bind(this)}
           />
         </div>
 
